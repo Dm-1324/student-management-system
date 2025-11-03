@@ -25,17 +25,19 @@ public class Student {
     private String rollNumber;
 
     @Column(length = 50)
-    private String course;
+    @Enumerated(EnumType.STRING)
+    private StudentCourse course;
 
     private Integer year;
 
     private BigDecimal marks;
 
     @Column(length = 20)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private StudentStatus status;
 
 
-    public Student(String name, String rollNumber, String course, Integer year, BigDecimal marks, String status) {
+    public Student(String name, String rollNumber, StudentCourse course, Integer year, BigDecimal marks, StudentStatus status) {
         this.name = name;
         this.rollNumber = rollNumber;
         this.course = course;

@@ -1,11 +1,9 @@
 package com.example.student_management_system.dto;
 
 
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import com.example.student_management_system.entity.StudentCourse;
+import com.example.student_management_system.entity.StudentStatus;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -19,7 +17,7 @@ public class StudentDto {
     @NotBlank(message = "Roll number is required.")
     private String rollNumber;
 
-    private String course;
+    private StudentCourse course;
 
     @NotNull(message = "Year is required.")
     @Min(value = 1, message = "Year must be 1 or greater.")
@@ -30,5 +28,5 @@ public class StudentDto {
     @DecimalMin(value = "0.0", message = "Marks cannot be negative.")
     private BigDecimal marks;
 
-    private String status;
+    private StudentStatus status;
 }
