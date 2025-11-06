@@ -20,6 +20,7 @@ public class StudentDto {
     @NotBlank(message = "Roll number is required.")
     private String rollNumber;
 
+    @NotNull(message = "Course is required")
     private StudentCourse course;
 
     @NotNull(message = "Year is required.")
@@ -32,6 +33,6 @@ public class StudentDto {
     @Max(value = 100, message = "Marks cannot exceed 100.")
     @Digits(integer = 3, fraction = 2, message = "Marks must have at most 2 decimal places.")
     private BigDecimal marks;
-
+    @NotNull(message = "Status is required")
     private StudentStatus status;
 }

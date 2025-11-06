@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:5173/")
 @RestController
 @RequestMapping("/students")
 public class StudentController {
@@ -24,8 +25,8 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<Student> addStudent(@Valid @RequestBody StudentDto dto) {
-        Student student = studentService.addStudent(dto);
+    public ResponseEntity<Student> addStudent(@Valid @RequestBody StudentDto studentDto) {
+        Student student = studentService.addStudent(studentDto);
         return new ResponseEntity<>(student, HttpStatus.CREATED);
     }
 
@@ -45,9 +46,9 @@ public class StudentController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<String> updateStudent(@PathVariable Long id, @RequestBody StudentDetailsDto dto) {
+    public ResponseEntity<String> updateStudent(@PathVariable Long id, @RequestBody StudentDetailsDto studentDetailsDto) {
         try {
-            studentService.updateStudentDetails(id, dto);
+            studentService.updateStudentDetails(id, studentDetailsDto);
             return ResponseEntity.ok("Student details updated successfully!");
         } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);

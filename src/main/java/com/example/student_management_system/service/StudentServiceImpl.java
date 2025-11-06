@@ -25,8 +25,8 @@ public class StudentServiceImpl implements StudentService {
 
 
     @Override
-    public Student addStudent(StudentDto dto) {
-        Student student = studentMapper.toEntity(dto);
+    public Student addStudent(StudentDto studentDto) {
+        Student student = studentMapper.toEntity(studentDto);
         return studentRepository.save(student);
     }
 
@@ -42,13 +42,13 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void updateStudentDetails(Long id, StudentDetailsDto dto) {
+    public void updateStudentDetails(Long id, StudentDetailsDto studentDetailsDto) {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("No Student Found with ID " + id));
 
-        student.setCourse(nonNull(dto.getCourse()) ? dto.getCourse() : student.getCourse());
-        student.setMarks(nonNull(dto.getMarks()) ? dto.getMarks() : student.getMarks());
-        student.setStatus(nonNull(dto.getStatus()) ? dto.getStatus() : student.getStatus());
+        student.setCourse(nonNull(studentDetailsDto.getCourse()) ? studentDetailsDto.getCourse() : student.getCourse());
+        student.setMarks(nonNull(studentDetailsDto.getMarks()) ? studentDetailsDto.getMarks() : student.getMarks());
+        student.setStatus(nonNull(studentDetailsDto.getStatus()) ? studentDetailsDto.getStatus() : student.getStatus());
 
         studentRepository.save(student);
     }
@@ -56,7 +56,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void deleteStudent(Long id) {
         Student student = studentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No Student Found with ID + " + id));
+                .orElseThrow(() -> new RuntimeException("No Student Found with ID  " + id));
         studentRepository.delete(student);
 
     }

@@ -2,10 +2,9 @@ package com.example.student_management_system.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +15,7 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Student {
 
     @Id
@@ -34,6 +34,9 @@ public class Student {
     @Enumerated(EnumType.STRING)
     private StudentCourse course;
 
+    @NotNull(message = "Year is required.")
+    @Min(value = 1, message = "Year must be 1 or greater.")
+    @Max(value = 4, message = "Year cannot exceed 4.")
     private Integer year;
 
     @Max(value = 100, message = "Marks cannot exceed 100.")

@@ -10,13 +10,13 @@ import java.util.List;
 @Service
 public interface StudentService {
 
-    public Student addStudent(StudentDto dto);
+    public Student addStudent(StudentDto studentDto);
 
     public List<Student> getAllStudents();
 
     public Student getStudentById(Long id);
 
-    public void updateStudentDetails(Long id, StudentDetailsDto dto);
+    public void updateStudentDetails(Long id, StudentDetailsDto studentDetailsDto);
 
     public void deleteStudent(Long id);
 }

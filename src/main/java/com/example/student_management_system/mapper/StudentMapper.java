@@ -7,14 +7,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class StudentMapper {
     public Student toEntity(StudentDto dto) {
-        return new Student(
-                dto.getName(),
-                dto.getRollNumber(),
-                dto.getCourse(),
-                dto.getYear(),
-                dto.getMarks(),
-                dto.getStatus()
-        );
+        return Student.builder()
+                .name(dto.getName())
+                .marks(dto.getMarks())
+                .year(dto.getYear())
+                .course(dto.getCourse())
+                .rollNumber(dto.getRollNumber())
+                .status(dto.getStatus())
+                .build();
     }
 
 
