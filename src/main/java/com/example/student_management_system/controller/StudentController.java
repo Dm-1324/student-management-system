@@ -3,7 +3,6 @@ package com.example.student_management_system.controller;
 
 import com.example.student_management_system.dto.StudentDetailsDto;
 import com.example.student_management_system.dto.StudentDto;
-import com.example.student_management_system.entity.Student;
 import com.example.student_management_system.service.StudentServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,21 +24,21 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<Student> addStudent(@Valid @RequestBody StudentDto studentDto) {
-        Student student = studentService.addStudent(studentDto);
-        return new ResponseEntity<>(student, HttpStatus.CREATED);
+    public ResponseEntity<StudentDto> addStudent(@Valid @RequestBody StudentDto studentDto) {
+        StudentDto studentResponseDto = studentService.addStudent(studentDto);
+        return new ResponseEntity<>(studentResponseDto, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public List<Student> getAllStudents() {
+    public List<StudentDto> getAllStudents() {
         return studentService.getAllStudents();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
+    public ResponseEntity<StudentDto> getStudentById(@PathVariable Long id) {
         try {
-            Student student = studentService.getStudentById(id);
-            return ResponseEntity.ok(student);
+            StudentDto studentResponseDto = studentService.getStudentById(id);
+            return ResponseEntity.ok(studentResponseDto);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

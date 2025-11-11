@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 @Data
 public class StudentDto {
 
+    private Long id;
+
     @NotBlank(message = "Name is required.")
     @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "Name must only contain letters and spaces.")
     @Schema(example = "string")
