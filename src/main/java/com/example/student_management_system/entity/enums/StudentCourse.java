@@ -1,4 +1,4 @@
-package com.example.student_management_system.entity;
+package com.example.student_management_system.entity.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 

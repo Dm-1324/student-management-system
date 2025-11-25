@@ -1,7 +1,7 @@
 package com.example.student_management_system.dto;
 
-import com.example.student_management_system.entity.StudentCourse;
-import com.example.student_management_system.entity.StudentStatus;
+import com.example.student_management_system.entity.enums.StudentCourse;
+import com.example.student_management_system.entity.enums.StudentStatus;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Max;
 import lombok.Data;

@@ -1,15 +1,23 @@
 package com.example.student_management_system.controller;
 
 
+import com.example.student_management_system.dto.PaginatedResponse;
+import com.example.student_management_system.dto.PromoteStudentRequest;
 import com.example.student_management_system.dto.StudentDetailsDto;
 import com.example.student_management_system.dto.StudentDto;
 import com.example.student_management_system.service.StudentServiceImpl;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:5173/")
@@ -44,6 +52,35 @@ public class StudentController {
         }
     }
 
+    //filter and paging
+    @GetMapping("/filteredData")
+    public ResponseEntity<PaginatedResponse<StudentDto>> getStudentsFiltered(
+            @RequestParam(required = false) String course,
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) BigDecimal minMarks,
+            @RequestParam(required = false) BigDecimal maxMarks,
+            @ParameterObject @PageableDefault(size = 15, sort = "marks", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        Page<StudentDto> studentsPage = studentService.getStudentsFiltered(course, year, minMarks, maxMarks, pageable);
+
+        PaginatedResponse<StudentDto> response = new PaginatedResponse<>(studentsPage);
+        return ResponseEntity.ok(response);
+    }
+
+    //promotion
+    @PatchMapping("/{id}/promote")
+    public ResponseEntity<String> promoteStudent(
+            @PathVariable Long id,
+            @Valid @RequestBody PromoteStudentRequest request
+    ) {
+        try {
+            studentService.promoteStudent(id, request.getPromoteToYear());
+            return ResponseEntity.ok("Student Promoted Successfully");
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<String> updateStudent(@PathVariable Long id, @RequestBody StudentDetailsDto studentDetailsDto) {
         try {
@@ -63,4 +100,6 @@ public class StudentController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+
+
 }

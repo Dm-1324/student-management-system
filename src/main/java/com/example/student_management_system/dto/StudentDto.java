@@ -1,8 +1,8 @@
 package com.example.student_management_system.dto;
 
 
-import com.example.student_management_system.entity.StudentCourse;
-import com.example.student_management_system.entity.StudentStatus;
+import com.example.student_management_system.entity.enums.StudentCourse;
+import com.example.student_management_system.entity.enums.StudentStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Data;
