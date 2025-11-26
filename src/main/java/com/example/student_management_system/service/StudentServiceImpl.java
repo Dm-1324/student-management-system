@@ -101,6 +101,32 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public Page<StudentDto> getFilteredStudents(String course, Integer year, BigDecimal minMarks, BigDecimal maxMarks, Pageable pageable) {
+
+        Integer filterYear = year;
+
+
+        if (course == null && year == null && minMarks == null && maxMarks == null) {
+            filterYear = properties.getMaxYear();
+        }
+
+
+        Boolean partialMatchConfig = properties.getFilter().getPartialCourseMatch();
+
+
+        Page<Student> studentPage = studentRepository.findOrdersFilteredNative(
+                course,
+                filterYear,
+                minMarks,
+                maxMarks,
+                partialMatchConfig,
+                pageable
+        );
+
+        return studentPage.map(studentMapper::toDto);
+    }
+
+    @Override
     public void promoteStudent(Long id, Integer promoteToYear) {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Student", "id", id));

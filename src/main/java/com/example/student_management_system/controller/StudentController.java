@@ -67,6 +67,19 @@ public class StudentController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/filteredRepo")
+    public ResponseEntity<PaginatedResponse<StudentDto>> getFilteredStudents(
+            @RequestParam(required = false) String course,
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) BigDecimal minMarks,
+            @RequestParam(required = false) BigDecimal maxMarks,
+            @ParameterObject @PageableDefault(size = 15, sort = "marks", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        Page<StudentDto> students = studentService.getStudentsFiltered(course, year, minMarks, maxMarks, pageable);
+        PaginatedResponse<StudentDto> response = new PaginatedResponse<>(students);
+        return ResponseEntity.ok(response);
+    }
+
     //promotion
     @PatchMapping("/{id}/promote")
     public ResponseEntity<String> promoteStudent(

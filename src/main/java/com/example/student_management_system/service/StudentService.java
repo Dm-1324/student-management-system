@@ -24,5 +24,8 @@ public interface StudentService {
 
     public Page<StudentDto> getStudentsFiltered(String course, Integer year, BigDecimal minMarks, BigDecimal maxMarks, Pageable pageable);
 
+    public Page<StudentDto> getFilteredStudents(String course, Integer year, BigDecimal minMarks, BigDecimal maxMarks
+            , Pageable pageable);
+
     public void promoteStudent(Long id, Integer promoteToYear);
 }
