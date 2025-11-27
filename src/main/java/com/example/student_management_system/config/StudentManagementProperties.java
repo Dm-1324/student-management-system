@@ -17,6 +17,7 @@ public class StudentManagementProperties {
     @Data
     public static class FilterProperties {
         private Boolean partialCourseMatch = true;
+        private Integer pageSize = 15;
     }
 
     @Data

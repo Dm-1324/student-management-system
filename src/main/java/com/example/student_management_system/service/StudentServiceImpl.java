@@ -9,8 +9,10 @@ import com.example.student_management_system.exception.ResourceNotFoundException
 import com.example.student_management_system.mapper.StudentMapper;
 import com.example.student_management_system.repository.StudentRepository;
 import com.example.student_management_system.repository.StudentSpecification;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -113,6 +115,13 @@ public class StudentServiceImpl implements StudentService {
 
         Boolean partialMatchConfig = properties.getFilter().getPartialCourseMatch();
 
+        int defaultPageSize = properties.getFilter().getPageSize();
+        Pageable newPageable = pageable;
+        if (pageable.getPageSize() == 10) {
+            newPageable = PageRequest.of(pageable.getPageNumber(),
+                    defaultPageSize,
+                    pageable.getSort());
+        }
 
         Page<Student> studentPage = studentRepository.findOrdersFilteredNative(
                 course,
@@ -120,7 +129,7 @@ public class StudentServiceImpl implements StudentService {
                 minMarks,
                 maxMarks,
                 partialMatchConfig,
-                pageable
+                newPageable
         );
 
         return studentPage.map(studentMapper::toDto);
@@ -159,5 +168,20 @@ public class StudentServiceImpl implements StudentService {
         }
 
         studentRepository.save(student);
+    }
+
+    @Override
+    @Transactional
+    public List<StudentDto> bulkAddStudents(List<StudentDto> studentDtos) {
+        List<Student> students = studentDtos.stream().map(studentMapper::toEntity).toList();
+
+        List<Student> savedStudent = studentRepository.saveAll(students);
+
+        return savedStudent.stream().map(studentMapper::toDto).toList();
+    }
+
+    @Override
+    public void bulkDeleteStudents(List<Long> studentIds) {
+        studentRepository.deleteAllById(studentIds);
     }
 }

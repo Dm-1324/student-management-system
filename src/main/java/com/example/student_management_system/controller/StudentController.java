@@ -18,13 +18,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:5173/")
 @RestController
 @RequestMapping("/students")
 public class StudentController {
     private final StudentServiceImpl studentService;
+
 
     @Autowired
     public StudentController(StudentServiceImpl studentService) {
@@ -35,6 +38,13 @@ public class StudentController {
     public ResponseEntity<StudentDto> addStudent(@Valid @RequestBody StudentDto studentDto) {
         StudentDto studentResponseDto = studentService.addStudent(studentDto);
         return new ResponseEntity<>(studentResponseDto, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/bulkAdd")
+    public ResponseEntity<List<StudentDto>> bulkAddStudent(@Valid @RequestBody List<StudentDto> studentDtos) {
+        List<StudentDto> savedStudent = studentService.bulkAddStudents(studentDtos);
+
+        return new ResponseEntity<>(savedStudent, HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -73,9 +83,11 @@ public class StudentController {
             @RequestParam(required = false) Integer year,
             @RequestParam(required = false) BigDecimal minMarks,
             @RequestParam(required = false) BigDecimal maxMarks,
-            @ParameterObject @PageableDefault(size = 15, sort = "marks", direction = Sort.Direction.DESC) Pageable pageable
+            @ParameterObject @PageableDefault(sort = "marks", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        Page<StudentDto> students = studentService.getStudentsFiltered(course, year, minMarks, maxMarks, pageable);
+
+
+        Page<StudentDto> students = studentService.getFilteredStudents(course, year, minMarks, maxMarks, pageable);
         PaginatedResponse<StudentDto> response = new PaginatedResponse<>(students);
         return ResponseEntity.ok(response);
     }
@@ -114,5 +126,27 @@ public class StudentController {
         }
     }
 
+    @DeleteMapping("/bulk")
+    public ResponseEntity<String> bulkDeleteStudents(@RequestParam String studentIds) {
+        if (studentIds == null || studentIds.isEmpty()) {
+            return new ResponseEntity<>("List of IDs to delete cannot be empty.", HttpStatus.BAD_REQUEST);
+        }
 
+        List<Long> idsStudent;
+
+        try {
+            idsStudent = Arrays.stream(studentIds.split(","))
+                    .map(s -> s.trim())
+                    .map(s1 -> Long.valueOf(s1))
+                    .toList();
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("Invalid format for IDs. Please use comma-separated numbers (e.g., 101, 102).", HttpStatus.BAD_REQUEST);
+        }
+
+        String idList = idsStudent.stream().map(s -> String.valueOf(s))
+                .collect(Collectors.joining(", "));
+
+        studentService.bulkDeleteStudents(idsStudent);
+        return ResponseEntity.ok(String.format("Successfully deleted %d students with IDs: [%s].", idsStudent.size(), idList));
+    }
 }

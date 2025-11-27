@@ -28,4 +28,8 @@ public interface StudentService {
             , Pageable pageable);
 
     public void promoteStudent(Long id, Integer promoteToYear);
+
+    public List<StudentDto> bulkAddStudents(List<StudentDto> studentDtos);
+
+    public void bulkDeleteStudents(List<Long> studentIds);
 }
